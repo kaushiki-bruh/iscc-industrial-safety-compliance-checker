@@ -1,7 +1,0 @@
-services:
-  - type: web
-    name: iscc-public-demo
-    runtime: docker
-    plan: free
-    dockerfilePath: ./Dockerfile
-    healthCheckPath: /api/health
