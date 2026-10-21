@@ -35,3 +35,14 @@ Seven configurable demo checks run against extracted text. Each missing topic cr
 ## Developer checks
 
 From `backend`, run `.venv\Scripts\python.exe -m unittest discover -v`. From `frontend`, run `npm run build`.
+
+## Public website deployment (Render)
+
+This repo includes a Dockerfile and Render Blueprint. After pushing it to GitHub:
+
+1. Sign in to Render and connect the public GitHub repository.
+2. Create a new **Blueprint** from that repository and review `render.yaml` before applying it. It creates a public web service on the paid `starter` plan and a 1 GB persistent disk so SQLite and uploads survive restarts. Check the current price in Render before confirming deployment.
+3. Wait for the deploy to finish, then open the `onrender.com` URL shown for the service. The app and `/api` run on the same origin; `/api/health` is the health check.
+4. Send that URL to your friend. Later pushes to `main` can trigger redeployment.
+
+**Public access warning:** anyone can open this site, upload documents, and view the shared audit history and generated reports. Do not upload confidential or personal documents. The current demo has no login, quota, or per-user data separation.

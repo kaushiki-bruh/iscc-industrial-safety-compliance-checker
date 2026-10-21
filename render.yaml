@@ -1,0 +1,11 @@
+services:
+  - type: web
+    name: iscc-public-demo
+    runtime: docker
+    plan: starter
+    dockerfilePath: ./Dockerfile
+    healthCheckPath: /api/health
+    disk:
+      name: iscc-data
+      mountPath: /var/data
+      sizeGB: 1

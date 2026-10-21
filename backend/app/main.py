@@ -1,9 +1,10 @@
 from datetime import datetime, timezone
 from pathlib import Path
-import json, re, sqlite3, uuid
+import json, os, re, sqlite3, uuid
 from io import BytesIO
 from fastapi import FastAPI, File, HTTPException, UploadFile
 from fastapi.middleware.cors import CORSMiddleware
+from fastapi.staticfiles import StaticFiles
 from fastapi.responses import StreamingResponse
 from pypdf import PdfReader
 from docx import Document
@@ -14,7 +15,8 @@ from xml.sax.saxutils import escape
 from .rules import RULES, analyze
 
 BASE = Path(__file__).resolve().parents[1]
-DATA = BASE / "data"
+PROJECT = BASE.parent
+DATA = Path(os.environ.get("ISCC_DATA_DIR", str(BASE / "data"))).resolve()
 UPLOADS = DATA / "uploads"
 DB = DATA / "iscc.sqlite3"
 MAX_BYTES = 20 * 1024 * 1024
@@ -91,3 +93,9 @@ def pdf_report(audit_id: str):
     story += [Spacer(1,10),Paragraph("Disclaimer: This educational screening uses simple phrase matching. It is not AI, legal advice, comprehensive regulatory validation, or official certification. Results may be incomplete or incorrect and require qualified human review.",styles["Italic"])]
     SimpleDocTemplate(buffer,pagesize=letter,title="ISCC screening report").build(story); buffer.seek(0)
     return StreamingResponse(buffer,media_type="application/pdf",headers={"Content-Disposition":f'attachment; filename="ISCC_{audit_id[:8]}_report.pdf"'})
+
+# In production, serve the Vite build and API from one origin. In local development,
+# Vite serves the UI separately and proxies /api to this FastAPI process.
+FRONTEND_DIST = PROJECT / "frontend" / "dist"
+if FRONTEND_DIST.is_dir():
+    app.mount("/", StaticFiles(directory=str(FRONTEND_DIST), html=True), name="frontend")
