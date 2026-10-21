@@ -8,7 +8,7 @@ RUN npm run build
 FROM python:3.13-slim
 ENV PYTHONDONTWRITEBYTECODE=1 \
     PYTHONUNBUFFERED=1 \
-    ISCC_DATA_DIR=/var/data
+    ISCC_DATA_DIR=/tmp/iscc-data
 WORKDIR /app/backend
 COPY backend/requirements.txt ./requirements.txt
 RUN pip install --no-cache-dir -r requirements.txt

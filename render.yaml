@@ -2,10 +2,6 @@ services:
   - type: web
     name: iscc-public-demo
     runtime: docker
-    plan: starter
+    plan: free
     dockerfilePath: ./Dockerfile
     healthCheckPath: /api/health
-    disk:
-      name: iscc-data
-      mountPath: /var/data
-      sizeGB: 1

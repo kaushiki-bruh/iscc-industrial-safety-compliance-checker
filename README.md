@@ -41,8 +41,10 @@ From `backend`, run `.venv\Scripts\python.exe -m unittest discover -v`. From `fr
 This repo includes a Dockerfile and Render Blueprint. After pushing it to GitHub:
 
 1. Sign in to Render and connect the public GitHub repository.
-2. Create a new **Blueprint** from that repository and review `render.yaml` before applying it. It creates a public web service on the paid `starter` plan and a 1 GB persistent disk so SQLite and uploads survive restarts. Check the current price in Render before confirming deployment.
+2. Create a new **Blueprint** from that repository and review `render.yaml` before applying it. It creates a public web service on Render's **Free** plan, with no persistent disk.
 3. Wait for the deploy to finish, then open the `onrender.com` URL shown for the service. The app and `/api` run on the same origin; `/api/health` is the health check.
 4. Send that URL to your friend. Later pushes to `main` can trigger redeployment.
 
-**Public access warning:** anyone can open this site, upload documents, and view the shared audit history and generated reports. Do not upload confidential or personal documents. The current demo has no login, quota, or per-user data separation.
+**Free plan limits:** Render spins down an idle Free web service; its next visit can take about a minute to load. Its filesystem is temporary, so SQLite audit history and uploaded files can disappear whenever Render restarts, spins down, or redeploys the service. See [Render's Free instance limits](https://render.com/docs/free).
+
+**Public access warning:** anyone can open this site, upload documents, and view the shared audit history and generated reports while they remain available. Do not upload confidential or personal documents. The current demo has no login, quota, or per-user data separation.
